@@ -13,8 +13,9 @@ nav: true
 
 <p> Instructor for a lecture-based course with 200 students that provided an introduction to perceptual, motor, cognitive, linguistic, social, emotional, moral, and atypical development with an emphasis on broad themes and theories uniting a diverse field of research.
 
-<a href="{{ 460_syllabus.pdf | prepend: '/assets/pdf/' | relative_url }}" class="btn btn-sm z-depth-0" role="button">PDF</a>
+<!-- <a href="{{ 460_syllabus.pdf | prepend: '/assets/pdf/' | relative_url }}" class="btn btn-sm z-depth-0" role="button">PDF</a> -->
 
+<a href="{{https://rpomper.github.io/al-folio/assets/pdf/460_syllabus.pdf}}" class="btn btn-sm z-depth-0" role="button">PDF</a>
 
 <h2 class="year">{{2018}}</h2>
 
