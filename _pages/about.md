@@ -2,14 +2,12 @@
 layout: about
 title: about
 permalink: /
-description: Postdoctoral Research Fellow. <a href="https://www.boystownhospital.org/research/speech-language/word-learning">Word Learning Lab</a>. <a href="https://www.boystownhospital.org">Boys Town National Research Hospital</a>.
+description: <a href="https://www.boystownhospital.org">Boys Town National Research Hospital</a>
 
 profile:
   align: right
   image: prof_pic.jpg
   address: >
-    <p>555 North 30th Street</p>
-    <p>Omaha, NE 68105</p>
 
 news: false  # includes a list of news items
 selected_papers: true # includes a list of papers marked as "selected={true}"
