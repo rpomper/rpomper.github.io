@@ -160,7 +160,7 @@ github: [metadata]
 scholar:
 
   last_name: Pomper
-  first_name: [Ron]
+  # first_name: [Ron]
 
   style: apa
   locale: en
