@@ -6,6 +6,10 @@ description: Materials for courses you taught. Replace this text with your descr
 nav: true
 ---
 
-For now, this page is assumed to be a static description of your courses. You can convert it to a collection similar to `_projects/` so that you can have a dedicated page for each course.
+<h2 class="year">{{2019}}</h2>
 
-Organize your courses by years, topics, or universities, however you like!
+## Child Development (Psych 460)
+
+<p> Instructor for a lecture-based course with 200 students that provided an introduction to perceptual, motor, cognitive, linguistic, social, emotional, moral, and atypical development with an emphasis on broad themes and theories uniting a diverse field of research.
+
+<h2 class="year">{{2018}}</h2>
