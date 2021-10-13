@@ -328,18 +328,21 @@ footer.sticky-bottom {
     }
   }
 
-  a.btn {
-      color: var(--global-text-color);
-      border: 1px solid var(--global-text-color);
-      padding-left: 1rem;
-      padding-right: 1rem;
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+  .contact-icons {
+    text-align: center;
+    font-size: 2rem;
+    a {
+      i::before {
+        color: var(--global-text-color);
+        -webkit-transition: all 0.2s ease-in-out;
+      }
       &:hover {
-        color: var(--global-theme-color);
-        border-color: var(--global-theme-color);
+        i::before {
+          color: var(--global-theme-color);
+        }
       }
     }
+  }
 
   .card {
     img {
