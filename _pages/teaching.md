@@ -26,6 +26,3 @@ nav: true
 <br>
 
 <a href="https://rpomper.github.io/al-folio/assets/pdf/601_syllabus.pdf" class="btn btn-sm z-depth-0" role="button">Syllabus</a>
-
-
-  </div>
