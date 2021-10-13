@@ -9,8 +9,8 @@ category: ongoing research
 
 This project explores the effect of simultaneous vs. sequential exposure to novel words and novel referents on multiple aspects of novel word learning for 9- to 11-year-old children with Developmental Language Disorder (DLD) or typical language development (TD).
 
-<br>
-<a href="https://osf.io/pzew4/" class="btn btn-sm z-depth-0" role="button">OSF</a>
+<a href="https://osf.io/pzew4" title="OSF"><i class="ai ai-osf"></i></a>
+<a href="https://github.com/rpomper/PreFam" title="GitHub"><i class="fab fa-github"></i></a>
 <br>
 
 <div class="row">
