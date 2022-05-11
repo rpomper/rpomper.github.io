@@ -9,7 +9,7 @@ category: ongoing research
 
 This project explores the effect of simultaneous vs. sequential exposure to novel words and novel referents on multiple aspects of novel word learning for 9- to 11-year-old children with Developmental Language Disorder (DLD) or typical language development (TD).
 
-<a href="https://github.com/rpomper/rpomper.github.io/blob/master/assets/pdf/Async_Poster.pdf">Click here</a> for our poster presented at SRCLD in 2022. Citation:
+<a href="https://rpomper.github.io/assets/pdf/Async_Poster.pdf">Click here</a> for our poster presented at SRCLD in 2022. Citation:
 > Pomper, R., Arbisi-Kelm, T., Eden, N., & McGregor, K. (2022, June). Separating <br>
 presentation of words and their referents facilitates learning for children <br>
 with and without Developmental Language Disorder. Poster presented <br>
