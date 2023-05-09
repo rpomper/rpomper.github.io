@@ -10,8 +10,8 @@ category: ongoing research
 This project explores how 9- to 11-year-old children with and without Developmental Language Disorder (DLD) infer the meanings of words when reading and listening to text.
 
 <a href="https://rpomper.github.io/assets/pdf/Infer_SRCLD.pdf">Click here</a> for our poster presented at SRCLD in 2023. Citation:
-> Pomper, R., Reed, D. K., Eden, N., Arbisi-Kelm, T., & McGregor, K. K. (2023, June). <br>
-How children with and without Developmental Language Disorder infer word meaning from written and spoken texts <br>
+> Pomper, R., Reed, D. K., Eden, N., Arbisi-Kelm, T., & McGregor, K. K. (2023, June).
+How children with and without Developmental Language Disorder infer word meaning from written and spoken text.
 Poster presented at the Symposium for Research on Child Language Disorders, Madison, WI.
 
 
