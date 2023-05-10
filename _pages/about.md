@@ -12,6 +12,7 @@ profile:
 news: false  # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
+order: 1
 ---
 
 I am a Postdoctoral Research Fellow working with Karla McGregor in the <a href="https://www.boystownhospital.org/research/speech-language/word-learning">Word Learning Lab</a> at Boys Town National Research Hospital. I completed my PhD in Developmental Psychology at the University of Wisconsin-Madison working with Jenny Saffran in the <a href="https://infantlearning.waisman.wisc.edu/" target="\_blank">Infant Learning Lab</a>.

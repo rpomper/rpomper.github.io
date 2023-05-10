@@ -4,6 +4,7 @@ permalink: /teaching/
 title: teaching
 description:
 nav: true
+order: 4
 ---
 <div class="teaching">
 

@@ -6,6 +6,7 @@ description:
 nav: true
 display_categories: [ongoing research]
 horizontal: false
+order: 3
 ---
 <div class="projects">
   {% if site.enable_project_categories and page.display_categories %}
