@@ -4,6 +4,7 @@ title: Infer
 description: Inferring word meaning from text
 img: /assets/img/infer.png
 importance: 1
+project_order: 1
 category: ongoing research
 ---
 
