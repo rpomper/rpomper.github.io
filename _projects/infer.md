@@ -8,6 +8,48 @@ project_order: 1
 category: ongoing research
 ---
 
+
+<div style="text-align:center"> 
+  <video id="video1" width="420">
+    <source src="/assets/video/Infer_Example.mp4" type="video/mp4">
+    <!-- <source src="https://github.com/rpomper/rpomper.github.io/raw/master/assets/video/Infer_Example.mp4" type="video/mp4"> -->
+    <!-- <img height=250 alt="Word Learning Lab Logo" src="/assets/img/wll_logo.png"> <br> -->
+    <!-- <source src="https://github.com/rpomper/rpomper.github.io/blob/master/assets/video/Infer_Example.mp4" type="video/mp4"> -->
+    <!-- <source src="/assets/video/infer.ogg" type="video/ogg"> -->
+    Your browser does not support HTML video.
+  </video>
+  <br>
+  <button onclick="playPause()">Play/Pause</button> 
+  <button onclick="makeBig()">Big</button>
+  <button onclick="makeSmall()">Small</button>
+  <button onclick="makeNormal()">Normal</button>
+  <br><br>
+</div> 
+
+<script> 
+var myVideo = document.getElementById("video1"); 
+
+function playPause() { 
+  if (myVideo.paused) 
+    myVideo.play(); 
+  else 
+    myVideo.pause(); 
+} 
+
+function makeBig() { 
+    myVideo.width = 560; 
+} 
+
+function makeSmall() { 
+    myVideo.width = 320; 
+} 
+
+function makeNormal() { 
+    myVideo.width = 420; 
+} 
+</script> 
+
+
 This project explores how 9- to 11-year-old children with and without Developmental Language Disorder (DLD) infer the meanings of words when reading and listening to text.  <br><br>
 It is part of the <a href="https://www.boystownhospital.org/research/speech-language/word-learning/childrens-vocabulary-project">Children's Vocabulary Project</a> in the <a href="https://www.boystownhospital.org/research/speech-language/word-learning/">Word Learning Lab</a> at Boys Town National Research Hospital.
 The Children's Vocabulary Project is a longitudinal project funded by the <a href="https://reporter.nih.gov/project-details/10194443">NIH</a> that aims to establish a developmental trajectory of word learning for children with DLD and the underlying cognitive mechanisms.
