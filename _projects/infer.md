@@ -28,10 +28,10 @@ The Children's Vocabulary Project is a longitudinal project funded by the <a hre
     </div>
 </div>
 <div class="caption">
-    Example of a paragraph from a fourth grade reader with one noun, one adjective, and one verb replaced with blanks.
+    Example of a paragraph from a fourth grade reader with one noun, one adjective, and one verb replaced with blanks.<br><a href="https://rpomper.github.io/assets/pdf/Infer_Stories.pdf">Click here</a> for the full set of stories included in the experiment.
 </div>
 
-<h2> What we learned </h2>
+
 
 <p>Children's guesses were scored as correct if they matched any of the words included in a set of 20 adults' responses. "Incorrect" guesses, those that were not include, in the adults' responses fell into several different categories: 
 <ul>
@@ -45,8 +45,9 @@ The Children's Vocabulary Project is a longitudinal project funded by the <a hre
 </ul>
 </p>
 
+
 <div style="text-align:center"> 
-  <video id="video1" width="420" loop controls='true'>
+  <video id="video1" width="600" loop controls='true'>
     <source src="/assets/video/Infer_Example.mp4" type="video/mp4">
     <!-- <source src="https://github.com/rpomper/rpomper.github.io/raw/master/assets/video/Infer_Example.mp4" type="video/mp4"> -->
     <!-- <img height=250 alt="Word Learning Lab Logo" src="/assets/img/wll_logo.png"> <br> -->
@@ -73,35 +74,54 @@ function playPause() {
 } 
 
 function makeBig() { 
-    myVideo.width = 560; 
+    myVideo.width = 800; 
 } 
 
 function makeSmall() { 
-    myVideo.width = 320; 
+    myVideo.width = 400; 
 } 
 
 function makeNormal() { 
-    myVideo.width = 420; 
+    myVideo.width = 600; 
 } 
 </script> 
 
+<h2> What we learned </h2>
 
-<a href="https://rpomper.github.io/assets/img/The%20Children's%20Vocabulary%20Project.png">Click here</a> for our a summary of what we did, what we learned, and why it matters. <br><br>
-<a href="https://rpomper.github.io/assets/img/Infer_SRCLD.png">Click here</a> for our poster presented at SRCLD in 2023. <br>
+<ul>
+  <li>Children with DLD are less accurate at guessing the missing words</li>
+  <li>This difficulty is _not_ specific to reading (inferring while listening is similarly compromised)</li>
+  <li>Nouns are easier than verbs and adjectives for children with and witout DLD</li>
+  <li>For children with DLD, a greater proportion of "incorrect" guesses were due to poor semantic fit, repetitions, or IDK responses</li>
+</ul>
+
+<h5> SRCLD </h5>
+
+We presented this research at the 2023 <a href="https://srcldconference.com">Symposium on Research in Child Language Disorders</a>:
+
+<div class="row">
+    <div class="col-la mt-3 mt-md-0">
+        <img class="img-fluid rounded z-depth-1" src="{{ '/assets/img/Infer_SRCLD.png' | relative_url }}" alt="" title="example paragraph"/>
+    </div>
+</div>
+<div class="caption">
+    <a href="https://rpomper.github.io/assets/img/Infer_SRCLD.png">Click here</a> to download our 2023 SRCLD poster. <br>
+</div>
+
 <a href="https://rpomper.github.io/assets/pdf/Infer_References.pdf">Click here</a> for the full list of references for our poster. <br>
-And <a href="https://rpomper.github.io/assets/pdf/Infer_Stories.pdf">click here</a> for the full set of stories included in the experiment.
 
 Citation:
-> Pomper, R., Reed, D. K., Eden, N., Arbisi-Kelm, T., & McGregor, K. K. (2023, June).
+<!-- <blockquote font-size=12px > -->
+Pomper, R., Reed, D. K., Eden, N., Arbisi-Kelm, T., & McGregor, K. K. (2023, June).
 How children with and without Developmental Language Disorder infer word meaning from written and spoken text.
 Poster presented at the Symposium for Research on Child Language Disorders, Madison, WI.
+<!-- </blockquote> -->
 
+<h2> Why it matters </h2>
 
-<div class="projects">
-  <div class="contact-icons">
-    <!-- <a href="https://osf.io/pzew4" title="OSF"><i class="ai ai-osf"></i></a> -->
-    <!-- <a href="https://github.com/rpomper/PreFam" title="GitHub"><i class="fab fa-github"></i></a> -->
-    </div>
-<br>
+<p>Word learning occurs across many contexts and is critical to academic, social, and professional success.</p>
+<p>To help them learn new words, children with DLD not only need help with reading but also support for understanding and using spoken language.<br>This project suggests that <a href="https://journals.sagepub.com/doi/pdf/10.1177/0265659018815736">interventions improving oral inferential comprehension</a> may improve outcomes for children with DLD in both reading and listening contexts.</p>
+
+ <a href="https://rpomper.github.io/assets/img/The%20Children's%20Vocabulary%20Project.png">Click here</a> to download a pdf summary of this project.
 
 
