@@ -10,7 +10,7 @@ category: ongoing research
 
 
 <div style="text-align:center"> 
-  <video id="video1" width="420">
+  <video id="video1" width="420" loop controls='true'>
     <source src="/assets/video/Infer_Example.mp4" type="video/mp4">
     <!-- <source src="https://github.com/rpomper/rpomper.github.io/raw/master/assets/video/Infer_Example.mp4" type="video/mp4"> -->
     <!-- <img height=250 alt="Word Learning Lab Logo" src="/assets/img/wll_logo.png"> <br> -->
@@ -19,7 +19,7 @@ category: ongoing research
     Your browser does not support HTML video.
   </video>
   <br>
-  <button onclick="playPause()">Play/Pause</button> 
+  <!-- <button onclick="playPause()">Play/Pause</button>  -->
   <button onclick="makeBig()">Big</button>
   <button onclick="makeSmall()">Small</button>
   <button onclick="makeNormal()">Normal</button>
