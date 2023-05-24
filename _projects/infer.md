@@ -45,21 +45,48 @@ The Children's Vocabulary Project is a longitudinal project funded by the <a hre
 </ul>
 </p>
 
+<style>
+  button{
+    color: var(--global-text-color);
+    border-color: var(--global-text-color);
+    border: 1px solid var(--global-text-color);
+    background-color: var(--global-bg-color);
+    padding: 3px 18px;
+    margin: 5px;
+    }
+  button:hover{
+    color: var(--global-theme-color);
+    border-color: var(--global-theme-color);
+    }
+
+  .btn.outline {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    color: var(--global-text-color);
+    border-color: var(--global-text-color);
+    border: 1px solid var(--global-text-color);
+  }
+  .btn.outline:hover {
+    color: var(--global-theme-color);
+    border-color: var(--global-theme-color);
+    border: 1px solid var(--global-theme-color);
+  }
+</style>
 
 <div style="text-align:center"> 
-  <video id="video1" width="600" loop controls='true'>
+  <video id="video1" width="360" loop controls='true' autoplay>
     <source src="/assets/video/Infer_Example.mp4" type="video/mp4">
-    <!-- <source src="https://github.com/rpomper/rpomper.github.io/raw/master/assets/video/Infer_Example.mp4" type="video/mp4"> -->
-    <!-- <img height=250 alt="Word Learning Lab Logo" src="/assets/img/wll_logo.png"> <br> -->
-    <!-- <source src="https://github.com/rpomper/rpomper.github.io/blob/master/assets/video/Infer_Example.mp4" type="video/mp4"> -->
-    <!-- <source src="/assets/video/infer.ogg" type="video/ogg"> -->
     Your browser does not support HTML video.
   </video>
   <br>
-  <!-- <button onclick="playPause()">Play/Pause</button>  -->
-  <button onclick="makeBig()">Big</button>
-  <button onclick="makeSmall()">Small</button>
-  <button onclick="makeNormal()">Normal</button>
+    <button type='button' class='btn outline z-depth-0' onclick="makeBig()">Big</button>
+    <button type='button' class='btn outline z-depth-0' onclick="makeNormal()">Normal</button>
+    <button type='button' class='btn outline z-depth-0' onclick="makeSmall()">Small</button>
+    <!-- <button onclick="makeBig()">Big</button>
+    <button onclick="makeNormal()">Normal</button>
+    <button onclick="makeSmall()">Small</button> -->
   <br><br>
 </div> 
 
@@ -78,7 +105,7 @@ function makeBig() {
 } 
 
 function makeSmall() { 
-    myVideo.width = 400; 
+    myVideo.width = 360; 
 } 
 
 function makeNormal() { 
