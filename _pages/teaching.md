@@ -2,10 +2,11 @@
 layout: page
 permalink: /teaching/
 title: teaching
-description:
+description: 
 nav: true
-order: 4
+nav_order: 4
 ---
+
 <div class="teaching">
 
 <h2 class="year">{{2022}}</h2>

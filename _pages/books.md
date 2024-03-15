@@ -4,7 +4,7 @@ permalink: /books/
 title: books
 description:
 nav: true
-order: 5
+nav_order: 5
 ---
 <div class="teaching">
 
