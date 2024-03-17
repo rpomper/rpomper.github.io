@@ -1,0 +1,391 @@
+---
+title: "4_GCA"
+author: "Ron Pomper"
+date: '2022-06-21'
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{css style settings, echo = FALSE}
+blockquote {
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    font-size: 14px;
+    border-left: 5px solid #eee;
+}
+```
+
+This script uses the following packages:
+
+```{r echo=T}
+
+# library(ggplot2)
+# library(tidyr)
+# library(lme4)
+# library(knitr)
+# library(kableExtra)
+# library(AICcmodavg)
+
+```
+
+
+
+```{r}
+
+setwd('~/Desktop/VWP Tutorial/Data/')
+d <- read.csv("SC_FinalData_n57.csv")
+
+d = d %>% 
+  filter(Condition %in% c('pre-switch','post-switch'),
+         percentMissingFrames < 50)
+
+```
+
+## Overview
+
+Previously, we fit a model on children's accuracy in fixating the target image averaged over the critical window (2_MeanAcc). We also fit multiple models on children's accuracy in fixating the target image for each time frame during the critical window and then used permutation analyses to determine whether a cluster of sequential effects was statistically significant (3_Cluster).
+
+Now, we will instead fit a model using growth curves to quantify how children's accuracy in fixating the target image _changes_ throughout the critical window. We will use different orthogonal time terms to quantify different aspects of this change (more on this in a moment).
+
+I learned how to conduct these growth curve analyses (GCA) from a 2-day workshop led by Dan Mirman (https://www.danmirman.org/gca). And from a book that Dan wrote on GCA: 
+
+> Mirman, D. (2014). Growth Curve Analysis and Visualization Using R. Boca Raton, FL: Chapman and Hall / CRC Press. https://www.routledge.com/Growth-Curve-Analysis-and-Visualization-Using-R/Mirman/p/book/9781466584327
+
+This book is very practical and covers both conceptual aspects of GCA and practical information about how to conduct GCA in R (with lots of examples of R code).
+
+I'll be showing you the specific GCA models that I use for my eye-tracking data, but I encourage you to check out Dan's book if you are interested in learning more.
+
+
+## Time Course 
+
+Here are time course plots of the changes in children's accuracy over time on trials in the Pre-Switch and Post-Switch blocks of the LWL task. These raw data that we will then be modelling.
+
+```{r plot raw fixations}
+
+plot = d %>%
+  filter(TimeC >-1100 & TimeC < 2500 & percentMissingFrames < 50 & Condition %in% c('pre-switch','post-switch')) %>%
+  group_by(Sub.Num, Condition, TimeC) %>% # aggregate over trials in each condition for each subject
+  summarise(
+    Accuracy=mean(Accuracy,na.rm=T)) %>%
+  group_by(Condition, TimeC) %>% # aggregate over participants in each group for each condition
+  summarise(
+    N = sum(!is.na(Accuracy)),
+    SD = sd(Accuracy,na.rm=TRUE),
+    SE = SD/sqrt(N),
+    Accuracy = mean(Accuracy,na.rm=TRUE),
+    lower=Accuracy-SE,
+    upper=Accuracy+SE)
+
+plot$Condition = factor(plot$Condition,c('pre-switch','post-switch'))
+
+ggplot(plot, aes(x=TimeC, y=Accuracy, fill=Condition, color=Condition)) + 
+  geom_hline(aes(yintercept=0.5),linetype='solid',color='gray') + 
+  geom_smooth(aes(ymin=lower, ymax=upper), stat="identity") +
+  geom_vline(aes(xintercept=0), linetype="dashed", color="black") +
+  geom_vline(aes(xintercept=-924), linetype="dashed", color="gray") +
+  geom_vline(aes(xintercept=986),linetype="dashed",color="gray") +
+  geom_line() +
+  theme_bw(base_size=14) +
+  coord_cartesian(xlim=c(-1000,2100), ylim= c(.39,1.01),expand=F) +
+  scale_x_continuous(breaks=seq(from=-900,to=2400,by=300)) +
+  scale_y_continuous(breaks=seq(from=0,to=1,by=.1)) +
+  scale_fill_manual(values=c("dodgerblue","coral2")) +
+  scale_color_manual(values=c("dodgerblue","coral2")) +
+  labs(x='Time since target onset (in ms)',y='Proportion Looking to Target',title='') +
+  theme(legend.justification=c(1,0), plot.title=element_text(hjust=.5),legend.position=c(1,0),legend.background=element_rect(fill= NA, color=NA),legend.title=element_blank(),legend.text = element_text(size = 11))
+
+remove(plot)
+
+```
+
+__Figure Legend__ Time course of changes in children's accuracy in fixating the target object over time for trials in the pre-switch (blue) and post-switch (red) blocks. Solid lines are children's accuracy in fixating the target image for each time frame (i.e., every 33 ms) averaged across trials within a condition and across children. Ribbons around the solid lines are +/- 1 SE. The gray vertical dashed line at -924 ms indicates the onset of the carrier phrase (e.g, "Find the"), the black vertical dashed line at 0 ms indicates the onset of the target word (e.g., "Sock"), and the gray vertical dashed line at 986 ms indicates the offset of the target word.
+
+
+## GCA
+
+Growth Curve Analysis (GCA) was used to quantify changes in the timecourse of children's word recognition accuracy during a critical window 300 to 1800 ms after the onset of the target word. Children's accuracy in fixating the target object was calculated as the empirical log odds of fixations to the target over fixations to the distractor at each time point (i.e., every 33 ms).
+
+### Time Terms
+
+Time course changes were measured using the following orthogonal polynomial time terms:
+
+* __intercept__, which quantifies overall accuracy (i.e., average across the entire window)
+* __linear__, which quantifies the average increase (i.e., slope of the line connecting accuracy from the onset to offset)
+* __quadratic__, which quantifies the steepness of the peak in accuracy (i.e., more negative value means sharper inverted u-shape)
+* __cubic__, which quantifies asymptotes in accuracy at the tails (i.e., delayed increase from chance at onset and maintained peak accuracy at offset)
+
+A few comments on time terms is necessary:
+
+First, there's health skepticism that the time terms (especially quadratic and cubic) do not reflect actual underlying cognitive constructs. Put another way, a steeper slope captured by a quadratic term does not necessarily mean faster lexical processing. See for instance, this paper by Bob McMurray: https://psyarxiv.com/pb2c6/
+
+Second, the estimates for these time terms are highly dependent on the critical window that you choose. You want the window to begin right when fixations deviate from chance and end shortly after they asymptote. Too much of an asymptote in either direction will warp the time terms as they try to fit the flat lines of the asymptote. If this is happening you would notice a poor fit between the model predictions and your raw data (which we will be plotting later).
+
+Here are two further examples:
+
+1. with a longer window (like here from 300 to 1800) the quadratic time term will be negative and capture the inverted u-shaped curve as the increase in accuracy is initially steep and then decelerates as it reaches the peak. with a shorter window (like my coarticulation paper from 300 to 900)
+ the quadratic time term is positive and captures the u-shaped curve as children's fixations are initially flat (at chance) and then rapidly accelerate. 
+2. if there is a baseline effect (i.e., children's accuracy is above chance in one condition, but not the other) you may find a significant effect of linear time that is spurious. linear time captures the change in children's accuracy from the start of the crtical window to the end. if children's accuracy ends at 90% in both conditions, but starts at 50% in condition A and 60% in condition B, you may find a difference in linear time between condition A (40% improvement) and condition B (30% improvement).
+
+Third, we need to use orthogonal time terms to remove the covariance between the time terms. With non-orthogonal time terms both linear and quadratic are correlated - as linear time increases, so does quadratic time. 
+
+Let me show you what I mean graphically:
+
+```{r echo=T}
+
+timebin = data.frame(TimeC=sort(unique(d$TimeC[d$TimeC>=300 & d$TimeC <=1801])),Bin=seq(from=1,to=length(unique(d$TimeC[d$TimeC>=300 & d$TimeC <=1801])),by=1))
+
+timebin = cbind(timebin,poly(1:max(timebin$Bin), 3)) 
+
+timebin = timebin %>% rename('linear'=`1`,'quadratic'=`2`,'cubic'=`3`)
+
+```
+
+```{r}
+
+kable(timebin, align='c',digits=2) %>% kable_styling(bootstrap_options = c("hover", "condensed", "responsive"),full_width=F,position='left')
+
+```
+
+```{r}
+
+temp = timebin %>% 
+  pivot_longer(
+    cols=linear:cubic,
+    names_to="TimeTerm"
+  )
+
+ggplot(temp,aes(x=Bin,y=value,color=TimeTerm)) +
+  geom_line()
+
+```
+
+
+### Formatting data
+
+Let's start with a simple model that just includes the effect of condition, by first creating the orthogonal time terms (using slightly different column headers): 
+
+```{r echo=T}
+
+timebin = data.frame(TimeC=sort(unique(d$TimeC[d$TimeC>=300 & d$TimeC <=1801])),TimeBin=seq(from=1,to=length(unique(d$TimeC[d$TimeC>=300 & d$TimeC <=1801])),by=1))
+timebin = cbind(timebin,poly(1:max(timebin$TimeBin), 3))
+colnames(timebin)=c('TimeC','TimeBin','ot1','ot2','ot3')
+
+
+```
+
+
+We will be using a different DV for these models: empirical logits. In all of our analyses we are modeling bounded data (accuracy can be no higher than 100% and no lower than 0%). When we previously conducted the cluster-based permutation analyses we kept the data at the individual trial level (1's and 0's) and used logistic mixed effects modeling. 
+
+As we've already seen the logistic models can take a while to fit and (more problematically) they often do not converge. Therefore, for GCA Dan Mirman recommends analyzing the the data averaged across trials using empirical logits (also known as log-odds). We could use raw accuracy as before, but as I already mentioned, the use of this measure can be problematic if there are a lot of data points near the boundaries (which is likely when keeping the data separate for each time frame). We cannot use regular logits, because these are calculated as the log of target fixations over distractor fixations. On time frames where the child was fixating the target image on every trial, we cannot calculate the logit, because `log(8/0)` is positive infinity. Similarly, on time frames where the child was fixating the distractor image on every trial, we also cannot calculate the logit, because `log(0/8)` is negative infinity. So the __empirical logit__ adjusts for this by adding 0.5 to both the numerator and denominator.
+
+One important feature of logits is that they capture an important property of bounded measures: as you approach floor (0%) or ceiling (100%) changes in accuracy are more difficult. For example, it is harder to increase accuracy by 10% from 90 to 100% than it is from 50 to 60%.
+
+We can see this numerically if we had an experiment with 10 trials: 
+
+* a 10% change in accuracy from 50% (`log(5.5/5.5)`=`r round(log(5.5/5.5),digits=3)`) to 60% (`log(6.5/4.5)`=`r round(log(6.5/4.5),digits=3)`) is associated with a change in `r round(log(6.5/4.5)-log(5.5/5.5),digits=3)` increase in empirical log-odds 
+* a 10% change in accuracy from 90% (`log(9.5/1.5)`=`r round(log(9.5/1.5),digits=3)`) to 100% (`log(10.5/0.5)`=`r round(log(10.5/0.5),digits=3)`) is associated with a change in `r round(log(10.5/0.5)-log(9.5/1.5),digits=3)` increase in empirical log-odds
+
+
+Okay, so we are aggregating our data by averaging across all of the trials within a condition for each time frame during our critical window and calculating the empirical logits (elog):
+
+
+```{r echo=T}
+
+d.gca = d %>%
+  filter(TimeC>=300 & TimeC <=1800) %>%
+  right_join(timebin,by='TimeC') %>%
+  group_by(Sub.Num,Condition,TimeC) %>%
+  summarise(
+    TimeBin=TimeBin[1],
+    ot1=ot1[1],
+    ot2=ot2[1],
+    ot3=ot3[1],
+    TrialN = sum(!is.na(Accuracy)),
+    TargetN = sum(Accuracy==1,na.rm=TRUE),
+    DistractorN = sum(Accuracy==0,na.rm=TRUE),
+    Accuracy = mean(Accuracy,na.rm=TRUE)) %>%
+  mutate(
+    elog=log((TargetN+0.5)/(DistractorN+0.5)),
+    wts=1/(TargetN+0.5) + (1/(DistractorN+0.5))
+    )
+
+d.gca$Condition <- factor(d.gca$Condition, c('pre-switch','post-switch'))
+contrasts(d.gca$Condition) = c(-.5,.5)
+colnames(attr(d.gca$Condition,"contrasts")) = ""
+
+```
+
+
+Recall, however, that for any participant at any given time trial they may not have the maximum number of trials (e.g., the child was not looking at either image, their eyes were blocked, etc.). When fitting our model, however, we want to give more weight to elog values that were calculated using more compared to less data. We will use these weights as an input to our model.
+
+### Model fit
+
+
+```{r Model 1, echo=T}
+
+m <- lmer(elog ~ (ot1+ot2+ot3)*Condition + ((ot1+ot2+ot3)*Condition|Sub.Num), data=d.gca, weights=1/wts, control=lmerControl(optimizer='bobyqa'),REML=FALSE)
+
+```
+
+Because it is computationally and theoretically difficult to estimate the degrees of freedom in mixed-effects models (using the kenward-rogers approximate can take 5 to 10 minutes), we will conduct tests of significance by assuming a Gaussian distribution for our t values; therefore, t-values > ± 1.96 are statistically significant.
+
+
+```{r GCA table, echo=T}
+
+coefs <- data.frame(coef(summary(m)))
+coefs$p.value <- 2*(1-pnorm(abs(coefs[,"t.value"])))
+coefs$sig[coefs$p.value < .10] = '+'
+coefs$sig[coefs$p.value < .05] = '*'
+coefs$sig[coefs$p.value > .10] = ''
+coefs$p.value = round(coefs$p.value,digits=4)
+
+```
+
+To make it easier to show our tables (without lots of decimals), I have created a `roundDF()` function that will go through a data frame, identify columns that are numerics and round them to have 3 decimal places:
+
+```{r echo=T}
+roundDF <- function(df) {
+  for (col in 1:ncol(df)) {
+  if (sapply(df,class)[col][[1]] == 'numeric') {
+    df[,col] = round(df[,col],digits=3)
+  }
+  }
+  return(df)
+}
+```
+
+
+```{r}
+kable(roundDF(coefs),align='c',format='html') %>% kable_styling(bootstrap_options = c("hover","condensed","responsive"),full_width=F,position='left') 
+```
+
+### Model plot
+
+Let's now plot the growth curve model fit with the raw data. To do this we need to create a data frame with the values for all of the fixed effects we want the model to generate preditions for:
+
+```{r echo=T}
+
+predictions = as.data.frame(expand.grid(ot1=timebin$ot1,Condition=c("pre-switch","post-switch"))) %>%
+  right_join(timebin,by='ot1') %>%
+  arrange(Condition,TimeC) %>%
+  select("TimeC","ot1","ot2","ot3","Condition")
+
+```
+
+```{r}
+
+kable(predictions[predictions$TimeC<500,],align='c',format='html') %>% kable_styling(bootstrap_options = c("hover","condensed","responsive"),full_width=F,position='left') 
+
+```
+
+Then we feed this into the model and get the predictions with standard errors using the `predictSE()` from the `AICcmodavg` package
+
+```{r echo=T}
+predictions = cbind(predictions,as.data.frame(predictSE(m,predictions)))
+```
+
+
+```{r}
+
+kable(predictions[predictions$TimeC<500,],align='c',format='html') %>% kable_styling(bootstrap_options = c("hover","condensed","responsive"),full_width=F,position='left') 
+
+```
+
+And now we can create a plot that includes both these model predictions and the raw data:
+
+```{r echo=T}
+
+plot = d.gca %>% 
+  group_by(Condition,TimeC) %>% 
+  summarise(elog = mean(elog,na.rm=T))
+
+ggplot(predictions, aes(x=TimeC, y=elog, color=Condition, fill=Condition)) +
+  geom_line(aes(y=fit)) +
+  geom_smooth(aes(y=fit, ymin=fit-se.fit, ymax=fit+se.fit), stat="identity") +
+  geom_point(data=plot) +
+  geom_hline(aes(yintercept=0), linetype="dashed", color="gray") +
+  theme_bw(base_size=14) +
+  labs(x='Time since target word onset (in ms)',y='Fixation Empirical Logit') +
+  scale_x_continuous(breaks=seq(from=300,to=1800,by=300)) +
+  scale_y_continuous(breaks=seq(from=-1,to=2.5,by=.25)) +
+  coord_cartesian(xlim=c(300,1800),ylim=c(-.55,2.2)) +
+  scale_color_manual(values=c("dodgerblue","coral2")) +
+  scale_fill_manual(values=c("dodgerblue","coral2"))+
+  theme(legend.justification=c(1,0), legend.position=c(1,0),legend.background=element_rect(fill= NA, color=NA), legend.text = element_text(size = 12), legend.title=element_blank(), strip.text = element_text(size=12))
+
+```
+
+__Figure legend__ Time course of changes in children's accuracy in fixating the target object over time for trials in the pre-switch (blue) and post-switch (red) blocks. Solid lines are the growth curve model fits. The ribbons around the lines represent +/- 1 SE. Data points are the raw data averaged across trials and children for each condition and time frame. The dashed horizontal line at 0 is chance (i.e., equal likelihood of fixating to the target and the distractor object). 
+```{r}
+coefs = roundDF(coefs)
+```
+
+### Model results
+
+```{r}
+summary(m)
+```
+
+
+Here's how I would write up the results:
+
+There's a significant effect of __Condition__ on the following time terms: 
+
+* _intercept_, b=`r coefs['Condition','Estimate']`,p=`r coefs['Condition','p.value']`
+
+But not on any of the other time terms, p's > `r min(coefs[c('ot1:Condition','ot2:Condition','ot3:Condition'),'p.value'])`
+
+
+Children have overall higher accuracy in fixating the target object on trials before the dimensional switch (pre-switch b= `r coefs['(Intercept)','Estimate']-(.5*coefs['Condition','Estimate'])`), compared to after the dimensional switch (post-switch b= `r coefs['(Intercept)','Estimate']+(.5*coefs['Condition','Estimate'])`) trials.
+
+
+Although marginally significant, let's look at how the growth curve changes when we manipulate just quadratic time from the estimate averaging across conditions: b=`r coefs['ot2','Estimate']` to the estimate in the pre-switch condition: b=`r coefs['ot2','Estimate']-(.5*coefs['ot2:Condition','Estimate'])` to the estimate in the post-switch condition: b=`r coefs['ot2','Estimate']+(.5*coefs['ot2:Condition','Estimate'])`
+
+
+```{r echo=T}
+
+b_int = 1.54
+b_lin = 3.29
+b_quad = -1.51
+b_cub = 0.17
+
+predictions.hand = as.data.frame(expand.grid(ot1=timebin$ot1)) %>%
+  right_join(timebin,by='ot1') %>%
+  arrange(TimeC) %>%
+  select("TimeC","ot1","ot2","ot3")
+
+predictions.hand = predictions.hand %>% 
+  mutate(
+    average = b_int + b_lin*ot1 + b_quad*ot2 + b_cub * ot3,
+    `pre-switch` = b_int + b_lin*ot1 + -1.79*ot2 + b_cub * ot3,
+    `post-switch` = b_int + b_lin*ot1 + -1.25*ot2 + b_cub * ot3
+  ) %>%
+  pivot_longer(cols=average:`post-switch`,names_to="Condition",values_to="fit") %>% 
+  mutate(se.fit=0) %>% 
+  arrange(Condition)
+
+predictions.hand$Condition=factor(predictions.hand$Condition,c("pre-switch","average","post-switch"))
+  
+  
+ggplot(predictions.hand, aes(x=TimeC, y=elog, color=Condition, fill=Condition)) +
+  geom_line(aes(y=fit)) +
+  geom_smooth(aes(y=fit, ymin=fit-se.fit, ymax=fit+se.fit), stat="identity") +
+  geom_hline(aes(yintercept=0), linetype="dashed", color="gray") +
+  theme_bw(base_size=14) +
+  labs(x='Time since target word onset (in ms)',y='Fixation Empirical Logit') +
+  scale_x_continuous(breaks=seq(from=300,to=1800,by=300)) +
+  scale_y_continuous(breaks=seq(from=-1,to=2.5,by=.25)) +
+  coord_cartesian(xlim=c(300,1800),ylim=c(-.55,2.2)) +
+  scale_color_manual(values=c("dodgerblue","green","coral2")) +
+  scale_fill_manual(values=c("dodgerblue","green","coral2"))+
+  theme(legend.justification=c(1,0), legend.position=c(1,0),legend.background=element_rect(fill= NA, color=NA), legend.text = element_text(size = 12), legend.title=element_blank(), strip.text = element_text(size=12))
+
+
+```
+

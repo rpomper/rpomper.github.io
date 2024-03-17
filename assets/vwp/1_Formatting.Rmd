@@ -1,0 +1,563 @@
+---
+title: "1_Formatting"
+author: "Ron Pomper"
+date: '2022-06-21'
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{css style settings, echo = FALSE}
+blockquote {
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    font-size: 14px;
+    border-left: 5px solid #eee;
+}
+```
+
+This script uses the following packages:
+
+```{r echo=T}
+
+# library(ggplot2)
+# library(tidyr)
+# library(knitr)
+# library(kableExtra)
+
+```
+
+## Load tobii data
+
+```{r}
+
+setwd('~/Desktop/VWP Tutorial/Data/')
+d.tobii <- read.csv("SC_TobiiData_n54.csv")
+
+# byTrial = d.tobii %>% 
+#   select(subjCode,OverallTrialNum,testScreen,audioOnset,audioOffset) %>% 
+#   distinct() %>% 
+#   mutate(diff = audioOffset - audioOnset)
+#   
+# bySub = byTrial %>% group_by(subjCode) %>% 
+#   summarise(
+#     testScreen = mean(testScreen),
+#     audioOnset = mean(audioOnset),
+#     audioOffset = mean(audioOffset),
+#     diff = mean(diff)
+#   )
+# 
+# byGroup = bySub %>% 
+#   pivot_longer(cols=testScreen:diff,names_to='event',values_to='time') %>% 
+#   group_by(event) %>% 
+#   summarise(
+#     num = length(sum(!is.na(time))),
+#     min = min(time),
+#     max = max(time),
+#     SD = sd(time),
+#     time = mean(time)
+#   )
+
+str(d.tobii)
+head(d.tobii)
+```
+
+We have loaded in eye-tracking data that was collected using custom python scripts and a tobii x2-60 eye tracker. The raw output for these files is quite unwieldy, so we are loading in a dataframe that already has had some processing: 
+
+* identiying where each gaze location (i.e., the x- and y-coordinates) falls within different areas of interest ("bottomLeft", "bottomRight", or "away")
+* interpolating missing data, which is necessary because we will subsequently be combining this data with handcoded data that uses an "8-frame rule" - if the child's gaze is not visible for 8 or fewer frames (i.e, <267 ms, 8 frames * 33.3333 ms/frame) _and_ their gaze location does not change before and after the loss of visibility then coders do not mark fixations as away (since it is physically impossible for the child to have fixated elsewhere and back within that short time frame)
+* converting AOI into a measure of accuracy, which has a value of 1 when the child fixates the target AOI, 0 when they fixate the distractor AOI, and NA when they are not fixating either AOI
+
+Since E-Prime exports eye-tracking data in a more user-friendly format and includes AOI locations, I have decided to not go through these "pre-processing" steps. If you are interested in any of these steps, however, please let me know and I am happy to share the code.
+
+The data we will be working with is from the following article: 
+
+> Pomper, R., Kaushanskaya, M., & Saffran, J. (2022). Change is hard: 
+Individual differences in children’s lexical processing and executive functions after a shift in dimensions. _Language Learning and Development. 18_(2), 229-247. DOI: 10.1080/15475441.2021.1947289
+
+The original analyses and data are all available via OSF: https://osf.io/vrdm3/
+
+In this experiment, 5-year-old children completed a slightly altered version of the looking-while-listening (LWL) task from Pomper & Saffran (2016). On each trial, children were shown pictures of two familiar objects and heard a sentence identifying one using either its color or name. Trials were blocked so that there were 8 trials using one dimension (pre-switch), 8 using the other dimension (post-switch), and 16 with both dimensions interspersed (mixed). In the mixed block trials were organized such that 8 were the same dimension as the previous trial (same) and 8 were a different dimension (switch).
+
+In addition to the LWL task, children also completed the DCCS, Flanker, and N-back tasks. For each of the offline tasks, there were several trial types and response measures (i.e., accuracy vs. RT) that we could use.
+
+For the sake of simplicity, here we will focus on just the first main analysis - comparing the change in children's accuracy before (8 pre-switch trials) and after (8 post-switch trials) the change in dimensions.
+
+Also, to make things easier let's subset the data frame to only include the columns that we will need and rename them into a more user-friendly names.
+
+> A note on __syntax:__ this is the first time that we are using code from the __tidyr__ package. Broadly, the way this works is by passing a data frame through a series of functions. You use `%>%` to pass the output from each function into the next.
+>
+> The `select()` function will only include those columns that are listed. Use a comma to separate each column. R does _not_ care if these are all included on the same line or not. Below, I have separated the code over multiple lines to make it more legible (and have even used lines to group conceptually related variables in select). 
+>
+> The `rename()` function works replaces an old column name (right side of =) with a new column name (left side of =). Again, you can rename multiple columnns by separating each using a comma (lines do not matter).
+>
+> By including `d.tobii =` at the beginning of the code, we are essentially re-assigning/replacing the dataframe with all of our changes (subsetting then renaming). If you wanted to keep the original data frame, you could instead assign the output to a different data frame (e.g., `d.tobii.new =`). 
+
+
+```{r echo=T}
+
+d.tobii.full = d.tobii
+
+d.tobii = d.tobii %>% 
+  select(
+    subjCode,Order,
+    OverallTrialNum,Condition,TargetImage,TargetObjectPos,
+    TimeBin,TimeBinMs,GazePointXMean,GazePointYMean,LookAOI,Accuracy) %>% 
+  rename(
+    Sub.Num = subjCode,
+    Tr.Num = OverallTrialNum,
+    Target = TargetImage,
+    Target.Side = TargetObjectPos,
+    Time = TimeBinMs,
+    AOI = LookAOI
+  )
+  
+```
+
+Also, some final adjustments to fix incorrectly formatted subject numbers, re-center time (so that 0 is not the onset of the trial, but the target word), and convert condition (which is currently block number) into actual labels.
+
+> __basic R syntax:__ The brackets are subsetting the dataframe to only those rows where the column `Sub.Num` matches the value after the `==`, for those rows, we are assigning the value (e.g., `'501'`) on the right of `<-` to the column `$Sub.Num`
+> We can be even more sophisiticated in subsetting the dataframe to include those rows where the column `Condition` matches on of several values `%in% c('1A','1B')`
+
+```{r echo=T}
+
+d.tobii$Sub.Num[d.tobii$Sub.Num=='501a'] <- '501'
+d.tobii$Sub.Num[d.tobii$Sub.Num=='507b'] <- '507'
+d.tobii$Sub.Num[d.tobii$Sub.Num=='SC_508'] <- '508'
+d.tobii$Sub.Num[d.tobii$Sub.Num=='511a'] <- '511'
+d.tobii$Sub.Num[d.tobii$Sub.Num=='524a'] <- '524'
+d.tobii$Sub.Num[d.tobii$Sub.Num=='536a'] <- '536'
+d.tobii$Sub.Num[d.tobii$Sub.Num=='541a'] <- '541'
+d.tobii$Sub.Num[d.tobii$Sub.Num=='558A'] <- '558'
+
+d.tobii$TimeC <- d.tobii$Time - 3024
+# 2000 ms (silence) + 924 (carrier phrase) + 100 (python lag)
+
+# round TimeC
+d.tobii$TimeC <- round(d.tobii$TimeC,digits=0)
+
+d.tobii$Block = d.tobii$Condition
+d.tobii$Condition[d.tobii$Condition %in% c('1A','1B')]='pre-switch'
+d.tobii$Condition[d.tobii$Condition %in% c('2A','2B')]='post-switch'
+d.tobii$Condition[d.tobii$Condition == 'switch']='mixed-switch'
+d.tobii$Condition[d.tobii$Condition == 'same']='mixed-same'
+
+```
+
+Lastly, let's filter so that we only have data from the relevant conditions
+
+> __tidyr syntax:__ this is the more sophisticated way of subsetting data frames, which has the advantage that it can be embedded in a stream of tidyR steps. So in principle, we could run one line of code that does `select()`, `rename()` and `filter()` all at once using the pipes: ` %>% `
+
+```{r echo=T}
+
+d.tobii = d.tobii %>% filter(Condition %in% c('pre-switch','post-switch'))
+
+```
+
+This leaves us with data from `r n_distinct(d.tobii$Sub.Num)` participants, with `r n_distinct(d.tobii$Tr.Num)` trials per participant (`r n_distinct(d.tobii$Tr.Num[d.tobii$Condition=='pre-switch'])` in the pre-switch condition and `r n_distinct(d.tobii$Tr.Num[d.tobii$Condition=='post-switch'])` in the post-switch condition).
+
+## Cleaning
+
+__Before__ we begin to analyze the data, however, we will first clean the data to determine whether individual trials and individual participants should be excluded.
+
+Our cleaning process involves two steps:
+
+* first, we will plot the gaze locations (by x- and y-coordinates) for each child to determine (via subjective visual judgement) whether the eyetracker calibrated properly and was able to reliably identify gaze locations
+* second, we will determine the amount of lost data during our window of analysis to determine how many trials should be excluded due to too much missing data (via a subjective, but established cut-off of excluding trials with more than 50% missing data and participants with more than 50% excluded trials in a condition)
+
+### Gaze Locations
+
+To make this process easier, we are first going to create a function that will plot all of the gaze locations for a participant and save the plot as a pdf. And we will then use a for loop to iterate through each participant in the dataframe and use this function.
+
+> __function syntax__: the text on the left `plotGazeLocation` is the name of the function we are creating, the text inside the `()` are the names of the arguments that are being passed into the function. in this case, we will be passing in a dataframe, which will be called `d` (note that we are essentially re-naming the data frame that we will be passing in `d.tobii`), and a string, which will be called `sub.num` and will indicate which subject we are currently generating the plot for. These arguments will be passed in to everything thats contained within the `{ }`
+>
+> the `if()` statement embedded within our for loop is to prevent any errors that would occur if we use a `sub.num` that does not exist in the data frame and then tried to perform on an empty data frame where the number of values for any column `length()` would be 0.
+
+> __ggplot syntax__: uses similar logic to tidyr in that we take a data frame and pass it through several functions. while tidyr uses `%>%` to pass between functions, ggplot just uses `+`
+> 
+> ggplot is designed to be flexible in that you can provide it with minimal code and it will determine the appropriate graphical settings (e.g., width of the x- and y-axis). I am not a fan of their default setings, however. Luckily, we can customize essentially anything we want in our plots to over-ride those default settings. Here's a break down of what each line is doing:
+>
+>> 1. create a `ggplot()` where we identify which data frame will be used to generate the plot (`d`) and set the aesthetics `aes()`. we are telling ggplot which column in our data frame to use for values for the x-axis `x=GazePointXMean`, y-axis `x=GazePointYMean` and which column to use when determining how we want to change the color fill in our plot `fill=AOI`.
+>> 2. make a with data points `geom_point()` using the specified x and y values for each row in our data frame. we could add addition information inside `()` to modify the shape of the data points (e.g., to be squares `shape=15`)
+>> 3. set the style of plot to be black and white `theme_bw` and specify the default font size `base_size=12`
+>> 4. set the x and y limits of our plot `coord_cartesian` which are the number of pixels in the 1080p HD screen we used 1920x1080
+>> 5. set the tick marks on the x-axis `scale_x_continuous()` by generating a series of numbers using `seq()` which creates a list of numbers from 0 to 1080 skipping by 60
+>> 6. do the same for the y-axis, except flip the scale to decrease instead of increase `scale_y_reverse()` this is because the python tobii scripts use an inverted y-axis where higher values indicate pixels lower on the screen (put another way 0,0 is the top left of the screen, 0,1080 is the top right, 1920,1080 is bottom right, 1920,0 is bottom right)
+>> 7. changes the labels of the axes `r labs()` to avoid the default, which uses the ugly column names
+>> 8. draw the first line `geom_segment()` of the square that will mark the pixel location of the left image which stretched from 50 to 527 pixels on the x-axis and 700 to 1050, this is the top horizontal line of the box
+>> 9. draw bottom horizontal line
+>> 10. draw left vertical line
+>> 11. draw right vertical line
+>> 12-15 repeat to draw the square for the right image
+>> 16 manually specify which colors to use for the different values of AOI `scale_color_manual()` note the number here must align with the number of unique values for this column in the data frame. since we're giving it a character (not a factor) the order will occur alphabetically so `gray` is assigned to away, `dodgerblue` to bottomLeft, and `coral2` to bottomRight
+>> 17 split the plot into two separate facets by the column `~Target.Loc` again this occurs alphabetically, so the left facet will contain only the rows from the data frame where Target.Loc is bottomLeft and the right facet the rows where Target.Loc is bottomRight
+
+> Finally, `ggsave()` will save the most recent image in Plots to the current working directory. We specify the file name, which will `paste()` the text "SC_GazeLoc_sub", the value for the string `sub.num` passed into the function, and ".png" (this can be changed to other file formats like .pdf or .jpg) without any separation between each element. Finally we specify the dimensions and density (dpi) of the image.
+
+```{r echo=T}
+
+plotGazeLocation=function(d,sub.num) {
+  
+  d = d %>%
+    filter(Sub.Num == sub.num)
+  
+  if (length(d$Sub.Num!=0)){
+  
+    ggplot(d, aes(x=GazePointXMean, y=GazePointYMean,color=AOI)) +
+      geom_point() +
+      theme_bw(base_size=12) +
+      coord_cartesian(xlim=c(0,1920),ylim = c(1080,0)) +
+      scale_x_continuous(breaks=seq(from=0,to=1920,by=80))+
+      scale_y_reverse(lim=c(1080,0),breaks=seq(from=1080,to=0,by=-60))+
+      labs(x='X',y='Y')+
+      # left object
+      geom_segment(aes(x=50, y=527, xend=700, yend=527),colour='black')+
+      geom_segment(aes(x=50, y=1050, xend=700, yend=1050),colour='black') + 
+      geom_segment(aes(x=50, y=527, xend=50, yend=1050),colour='black')+
+      geom_segment(aes(x=700, y=527, xend=700, yend=1050),colour='black')+
+      # right object
+      geom_segment(aes(x=1220, y=527, xend=1870, yend=527),colour='black')+
+      geom_segment(aes(x=1220, y=1050, xend=1870, yend=1050),colour='black') + 
+      geom_segment(aes(x=1220, y=527, xend=1220, yend=1050),colour='black')+
+      geom_segment(aes(x=1870, y=527, xend=1870, yend=1050),colour='black')+
+      scale_color_manual(values=c('gray','dodgerblue','coral2'))+
+      facet_wrap(~Target.Loc)
+    
+    ggsave(paste('SC_GazeLoc_sub',as.character(sub.num),'.png',sep=''),width=9,height=5,dpi=300)
+    
+  }
+}
+
+```
+
+Now we can use this function in a for loop to generate a separate plot for each unique participant in our data frame.
+
+> __for loop syntax:__ `i` can be anything we want (e.g., `step`, `count`, `pineapple`), but most coders use `i` in loops
+> `unique(d.tobii$Sub.Num)` returns a list of each unique value for the column `Sub.Num` in our data frame: `r unique(d.tobii$Sub.Num)`
+> `for ()` then iterates through this list one at a time setting `i` to equal each value and then running the code contained within the `{ }`, which in this case is our new function
+> note: I've commented out the function within the for loop, so that it doesn't re-run and re-create 50+ plots each time I knit the markdown file
+
+```{r echo=T}
+
+setwd("~/Desktop/VWP Tutorial/Gaze Locations/")
+
+for (i in unique(d.tobii$Sub.Num)) {
+  # plotGazeLocation(d.tobii,i)
+}
+```
+
+```{r}
+remove(d,i,plot,GazeLocation)
+```
+
+Let's take a look at two different plots.
+
+![Subject 501](/Users/rpomper/Desktop/VWP Tutorial/Gaze Locations/SC_GazeLoc_sub501.png){#id .class width=100% height=100%}
+
+
+Notice how most of the tracked fixation locations fall within both AOIs and were correctly marked as either left or right fixations. This is an indication that the calibration procedure was successful and the tobii was able to accurately track the child's gaze throughout the experiment
+
+
+![Subject 517](/Users/rpomper/Desktop/VWP Tutorial/Gaze Locations/SC_GazeLoc_sub517.png){#id .class width=100% height=100%}
+
+Notice how the fixations are shifted and less distinct (clustering together in more of a blob). The calibration procedure for this child was not successful and we therefore should not use the tobii data. We handcoded this participant and will be adding their handcoded data later in this script. 
+
+This really is a subjective process, but I've found it is usually pretty clear-cut to identify children who were poorly tracked and this almost always aligns with children who failed calibration or calibration only worked for 2 or 3 of the 5 points on the screen. This is not uncommon, tobii eyetrackers can struggle to calibrate to some folks eyes based on their anatomy and/or the lighting conditions in the room.
+
+
+### Useable trials
+
+For our analyses, we're going to be analyzing changes in children's fixations to the target image from 300 to 1,800 ms, which is a standard window in most VWP / looking-while-listening (LWL) experiments. Since we are using a tobii x2-60, which tracks fixation locations at 60Hz (i.e., 60 times per second, so `r 1/60` seconds `1/60` elapses between frames, which is `r 1/60*1000` milliseconds), there are `r (1800-300)/(1/60*1000)` frames during the 1,500 ms window from 300 to 1,800 ms.
+
+When the tobii cannot track the childs gaze (because the eyes are blocked, child is shifting gaze, child falls out of the tobii range, etc.) or tobii is tracking the child's gaze and the child is not looking at either AOI (left vs. right image) the AOI will be marked as 'away' and accuracy will be NA. 
+
+Below, we will identify trials where more than 50% of the frames during the window (i.e., more than `r (1800-300)/(1/60*1000)/2`) have a value of NA. These trials will be excluded because there is too much missing data. This cut-off is subjective and I have seen other values used, but I consistently use 50%. There are two reasons to exclude these trials: 1) they indicate trials where the child is inattentive and fixations may not be in response to the spoken word, 2) with fewer data points there will be more extreme values in accuracy (for instance if the child only fixated the images for 1 of the 90 frames they will have an aggregate accuracy of either 0% or 100% for that trial).
+
+We will then identify children who 7 or all 8 trials excluded for one or both of the conditions (i.e., have 0 or 1 useable trials). Similar logic applies for excluding these children - they are likely inattentive _or_ we did not get a reliable track from the tobii (see previous section). I've adopted a hybrid approach where I will then handcode video recordings of these children's gaze locations using peyecoder, which we mentioned during the earlier session. 
+
+> __tidyr syntax__: we are creating a new data frame `cleaning` by first filtering the old data frame `d.tobii` to only include rows during our window of analysis (300 to 1800 ms after the onset of the target word)
+> We are then passing this filtered data frame into the `group_by()` function. Recall that there are `r (1800-300)/(1/60*1000)` frames during the critical window for each trial. With 16 trials total (8 per condition) there are `r (1800-300)/(1/60*1000)*16` rows of data for each participant. And with `r n_distinct(d.tobii$Sub.Num)` participants, we have `r (1800-300)/(1/60*1000)*16*n_distinct(d.tobii$Sub.Num)` total rows in the `d.tobii` dataframe. By including `Sub.Num` and `Tr.Num` we will be aggregating our data so that we will be collapsing the `r (1800-300)/(1/60*1000)` frames (rows of data) for each trial for each subject into a single row. Put another way, we will have 16 rows (1 per trial) for each of the `r n_distinct(d.tobii$Sub.Num)` participants, so `r n_distinct(d.tobii$Sub.Num)*16` rows in the `cleaning` data frame
+> We then pass the data frame into `summarise()` where we will create multiple columns that perform different operations when aggregating across the `r (1800-300)/(1/60*1000)` frames (rows of data) for each trial:
+>
+>> 1. __maxN__ is the number of values `length()` in the `Accuracy` column, which should be 90 for every trial
+>> 2. __lostN__ is the number of values `sum()` in the `Accuracy` column that have a value of NA `is.na()`
+>> 3. __percentMissingFrames__ then uses these two new columns to determine the proprtion of frames that have values of NA `(lostN/maxN)` and rounds this proption to only include 4 decimals `round(...,digits=4)` and converts it to a percentage `*100`
+> 
+> we no longer need the maxN, and lostN columns, just the percentage of missing frames, so we use `select()` to only include the columns we need
+
+```{r echo = T}
+
+cleaning = d.tobii %>%
+  filter(TimeC >= 300 & TimeC <= 1800) %>%
+  group_by(Sub.Num, Tr.Num) %>% 
+  summarise(
+    maxN=length(Accuracy),
+    lostN = sum(is.na(Accuracy)),
+    percentMissingFrames = round((lostN/maxN),digits=4)*100) %>% 
+  select(c("Sub.Num","Tr.Num","percentMissingFrames"))
+
+```
+
+Here's a snippet of what our new cleaning data frame looks like:
+
+```{r}
+head(cleaning)
+```
+
+
+> __tidyr syntax:__ finally, we want to append this information back to our main data frame, so we use `left_join()` which will use the matching columns in the two data frames (in our case `Sub.Num` and `Tr.Num`) to merge the two data frames.
+> note: always be extremely careful when using `_join()` functions from tidyr because they will adaptively add NAs or drop rows that do not have corresponding values in the other data frame. the `left_` portion is prioritizing the main data frame `d.tobii` to make sure every row in our original data frame is preserved. but it's always a good practice to compare the number of observations before and after merges.
+
+```{r echo=T}
+d.tobii <- left_join(d.tobii,cleaning)
+remove(cleaning)
+```
+
+
+Let's now look at the number of trials that need to be excluded because of too many misisng frames.
+
+> __tidyr syntax:__ we are now using our full data frame, where we have many rows for each trial, but each of these rows will all have the same value for the percentage of missing frames during the crticial window. using `distinct()` will reduce all of these duplicate rows, leaving us with only one row per trial per participant (essentially re-creating our `cleaning` data frame, but it's best practice to use the newly merged `d.tobii` data frame that we'll be using for our analyses, this way we would become aware of any issues that arose when merging). 
+> we `filter()` to only include those rows (trials) where fewer than 50% of the frames contained NA values
+> we then `group_by()` subject and condition to count using `length()` the number of trials that are remaining (maximum of 8) for each participant in each condition.
+> we then create a new column `NeedToExclude` using `mutate()` that uses an `ifelse()` statement to 
+
+```{r echo=T}
+
+plot = d.tobii %>% 
+  select(c('Sub.Num','Tr.Num','Condition','percentMissingFrames')) %>%
+  distinct() %>% 
+  filter(percentMissingFrames < 50) %>% 
+  group_by(Sub.Num,Condition) %>% 
+  summarise(N=length(percentMissingFrames)) %>%
+  mutate(NeedToExclude = ifelse(N<2,'yes','no'))
+
+```
+
+Here's what the data frame looks like:
+```{r}
+head(plot)
+```
+
+Let's now create a bar plot to see the distribution of useable trials across participants.
+
+> __ggplot syntax:__ we are re-using many of the same commands as before with a few additions
+>> `geom_bar()` replaces `geom_point()` and we need to specify that we are not performing any aggregation `stat='identity'` when making the bars (we already did that in the data frame that we are passing in to ggplot)
+>> using `theme()` we can remove the legend `legend.position='none'`, center the title `element_text(hjust=.5)`, and rotate the x-axis labels (subject numbers) so that they are vertical and do not overlap `element_text(angle = 90, vjust = 0.5)`
+
+```{r echo=T}
+ 
+ggplot(plot,aes(x=Sub.Num,y=N,fill=NeedToExclude)) +
+  geom_bar(stat='identity')+
+  theme_bw(base_size=11) +
+  coord_cartesian(ylim=c(0,8.2)) +
+  scale_y_continuous(breaks=seq(from=1,to=8,by=1)) +
+  scale_x_discrete(breaks=unique(plot$Sub.Num))+
+  scale_fill_manual(values=c("gray","coral2")) +
+  labs(x='Subject',y='Useable trials (max 8)', title='Post-Cleaning Data') +
+  facet_wrap(~Condition,ncol=1) +
+  theme(legend.position="none",plot.title=element_text(hjust=.5),axis.text.x = element_text(angle = 90, vjust = 0.5)) 
+
+```
+
+__Hold up!__ it's always good to plot and check the number of observations in your data frame to identify any missing data. Notice that _all_ of the trials for participant 540 were excluded for the pre-switch condition. But in the `plot` data frame there is only one row of data for this participant instead of two:
+
+```{r}
+plot[plot$Sub.Num %in% c("539","540"),]
+```
+
+In fact, there are several missing row of data in our `plot` data frame, which has 97 rows, but should have 108 (54 participants * 2 conditions). This is because several participants have _no_ useable trials after we filtered to remove trials with too many missing values: 
+
+```{r}
+setdiff(unique(d.tobii$Sub.Num),unique(plot$Sub.Num))
+```
+
+If we used our `plot` data frame to determine the average number of useable trials or participants with too many missing trials we would fail to include these participants because they were dropped when aggregating.
+
+So, we need to create our aggregate `plot` data frame using a slightly more cumbersome process:
+
+> instead of filtering trials to only include those with percentMissingFrames that meet our crtieria, we need to keep all trials and instead with `summarise` count not just the number of trials, but the number `sum()` of trials that remain `!is.na()` after filtering to include only those values that meet our criteria `percentMissingFrames[percentMissingFrames<50]`:
+
+```{r echo=T}
+
+plot = d.tobii %>% 
+  select(c('Sub.Num','Tr.Num','Condition','percentMissingFrames')) %>%
+  distinct() %>% 
+  group_by(Sub.Num,Condition) %>% 
+  summarise(N=sum(!is.na(percentMissingFrames[percentMissingFrames<50]))) %>%
+  mutate(NeedToExclude = ifelse(N<2,'yes','no'))
+
+```
+
+```{r }
+ 
+ggplot(plot,aes(x=Sub.Num,y=N,fill=NeedToExclude)) +
+  geom_bar(stat='identity')+
+  theme_bw(base_size=11) +
+  coord_cartesian(ylim=c(0,8.2)) +
+  scale_y_continuous(breaks=seq(from=1,to=8,by=1)) +
+  scale_x_discrete(breaks=unique(plot$Sub.Num))+
+  scale_fill_manual(values=c("gray","coral2")) +
+  labs(x='Subject',y='Useable trials (max 8)', title='Post-Cleaning Data') +
+  facet_wrap(~Condition,ncol=1) +
+  theme(legend.position="none",plot.title=element_text(hjust=.5),axis.text.x = element_text(angle = 90, vjust = 0.5)) 
+
+```
+
+There we go, now we have all of the participants in the sample.
+
+Let's investigate whether we have, on average, similar amounts of useable data in each of our conditions. If there is more missing data in the 2nd half (post-switch) then we should be worried that children are becoming inattentive towards the end of the experiment.
+
+> We are now aggregating across participants to calculate several metrics about the number of usable trials within each condition:
+>
+>> 1. `Obs` the number of observations (participants)
+>> 2. `SD` the SD of the number of observations across participants
+>> 3. `SE` is calculated by using our previous two outputs: divding SD by the square-root of Obs
+>> 4. `N` is the average number of useable trials across participants, note: its important that this variable match the variable name in the `plot` data frame, because we will be using _both_ for our violin plot (more on this in a second)
+>> 5. `lower` will be used to plot the SE bars and uses two of our previous outputs: subtracting 1 SE from the mean
+>> 6. `upper` ditto to lower, but adding 1 SE
+>
+> Note when calculating the `SD()` and `mean()` of the number of useable trials across participants `N` we are telling R to remove any NA values `na.rm=TRUE` the default for R is to include these NA values, which would yield a value of NA for the SD and mean then.
+
+
+```{r echo=T}
+
+groupplot = plot %>% 
+  group_by(Condition) %>% 
+  summarise(
+    Obs = sum(!is.na(N)),
+    SD = sd(N,na.rm=TRUE),
+    SE = SD/sqrt(Obs),
+    N = mean(N,na.rm=TRUE),
+    lower=N-SE,
+    upper=N+SE) 
+
+```
+
+```{r}
+head(groupplot)
+```
+
+Let's now use a violin plot to show the mean and distribution of useable trials across participants:
+
+> __ggplot syntax:__
+>> 1. `geom_violin()` will make a _vertical_ histogram that uses a smoothing function, `data=plot` is telling ggplot to _not_ use the `groupplot` data frame which we set to be the default data frame in the first line, this is because most of what we will be plotting uses the group descriptives, but for a histgoram we need the data at the subject level. `alpha=.8` makes the color filling the inside of the violin slightly transparent (1 = opaque, 0 = completely transparent)
+>> 2. `geom_point()` adds a circle `shape=16` that is black and has a size of 2 to our plot
+>> 3. `geom_errorbar()` adds errorbars to the data points that use the columns lower and upper from our data frame to determine where the error bars should being and end, width controls how wide the error bars extend horizontally.
+>
+> One important thing to note is that for our previous plot, the order in which we added our functions didn't really matter. Here the order for some of our functions _does_ matter. This is because when we add something to our plot it will _cover up_ anything that was previously created. So, we want our violins to be added first and then we'll be adding the data points on top of them.
+
+
+```{r echo=T}
+ggplot(groupplot,aes(x=Condition,y=N,fill=Condition)) +
+  geom_violin(data=plot,alpha=.8)+
+  geom_point(shape=16,fill='black',colour='black',size=2)+
+  geom_errorbar(width=.2, aes(ymin=lower, ymax=upper)) +
+  theme_bw(base_size=14) +
+  coord_cartesian(ylim=c(-0.1,8.1),xlim=c(.5,2.5),expand=F) +
+  scale_y_continuous(breaks=seq(from=0,to=8,by=1)) +
+  labs(x='Group',y='Useable trials (max 8)') +
+  scale_fill_manual(values=c('dodgerblue','coral2'))+
+  theme(legend.position='none') 
+
+```
+
+We can also make a nice table in markdown using functions from the `knitr` and `kableExtra` packages:
+
+> Within `kable()`:
+>> `align='c'` center justifies the content in each cell of the table
+>> `digits=2` rounds any cells with numeric values to only include 2 decimal points
+
+> We then pass this kable into the `kable_styling()` function, which creates even more sophisticated tables:
+>> `bootstrap_options = c()` allows us to set several features for our table, including: `hover` which will highlight the row of text underneath your cursor, `condensed` which reduces the space between cells by half, and `responsive` means that the table will scroll horizontally if it's too large to fit in the user's web browser
+>> `full_width=F` will not force the space between cells to increase in order for the table to stretch to fill the entire horizontal space in the user's web browser
+>> `position='left'` aligns the table on the left side of the page, rather than on the center or right
+
+```{r echo=T}
+
+kable(groupplot %>% select(Obs,N,SD) %>% rename(Mean=N),align='c',digits=3) %>% 
+  kable_styling(bootstrap_options = c("hover", "condensed", "responsive"),full_width=F,position='left')
+
+```
+
+```{r}
+remove(plot,groupplot)
+```
+
+
+## Downsample tobii data
+
+Ok, so we have now identified participants that need to be excluded and have handcoded those data. Before we can merge the tobii and handcoded data, we need to fix the formatting to be consistent across data frames. Some of these changes are minor, like making sure columns use the same values (e.g., changing 'bottomLeft' to 'l').
+
+```{r echo=T}
+d.tobii$Target.Side[d.tobii$Target.Side=='bottomLeft']='l'
+d.tobii$Target.Side[d.tobii$Target.Side=='bottomRight']='r'
+```
+
+A more major change, however, is to downsample the tobii data. Standard cameras only record at 30Hz, so 30 frames per second, which means that `r 1/30*1000` ms elapse between frames. 
+
+We can downsample using a few quick steps:
+
+> First, we create a new timebin by dividing our TimeC by 33 and using `round()` with a value of `0` to round to the nearest whole number.
+>> This results in consecutive time points have the same value for time bin
+>> For example `round(-7/33,0)` returns a value of `r round(-7/33,0)` (since -7/33 = `r -7/33`) and `round(9/33,0)` returns a value of `r round(9/33,0)` (since 9/33 = `r 9/33`)
+>
+> Since, each step in our TimeBin corresponds to 33ms, we can then create a new Time column by multiplying TimeBin by the elapsed time
+>> Actually the amount of time that elapses is 33.333333ms (`1000/30`) so we multiply by that and again round to remove decimals. This will yield Time values of 0, 33, 67, 100, 133, 167, 200, ... etc. (which aligns with the Time values that are outputed from peyecoder)
+
+```{r echo=T}
+
+d.tobii$TimeBin=round(d.tobii$TimeC/33,0)
+
+d.tobii$Time=round(d.tobii$TimeBin*(1000/30),digits=0)
+
+```
+
+But we now have multiple observations for each frame. 
+
+```{r}
+head(d.tobii)
+```
+
+
+One approach would be to average across the time frames. There are, however, two limitations for this: 1) it could result in average accuracy values of 1 (both frames fixating target), 0 (both frames fixating target), NA (one frame fixating target/distractor, one not fixating any AOI), or even 0.5 (one frame fixating target, one frame fixating distractor) and 2) we cannot average the AOI in the same way that we can average the x and y pixel locations and the accuracy. 
+
+A second approach (that I prefer) is to instead drop the second data point. If the tobii were truly operating at 30Hz instead of 60Hz we would _not_ have that second observation. 
+
+```{r echo=T}
+
+# d.tobii.avg =d.tobii %>%
+#   group_by(Sub.Num,Order,Tr.Num,Condition,Block,Target,Target.Side,TimeBin,Time,percentMissingFrames) %>%
+#   summarise(
+#     GazePointXMean = mean(GazePointXMean,na.rm=T),
+#     GazePointYMean = mean(GazePointYMean,na.rm=T),
+#     AOI = AOI[1],
+#     Accuracy = mean(Accuracy,na.rm=T))
+
+d.tobii.drop = d.tobii %>% 
+  group_by(Sub.Num,Order,Tr.Num,Condition,Block,Target,Target.Side,TimeBin,Time,percentMissingFrames) %>% 
+  summarise(
+    GazePointXMean = GazePointXMean[1],
+    GazePointYMean = GazePointYMean[1],
+    AOI = AOI[1],
+    Accuracy = Accuracy[1])
+  
+```
+
+```{r}
+head(d.tobii.drop)
+```
+
+The tobii data is now essentially ready to be merged with the handcoded data (we would need to remove the GazePointXMean and GazePointYMean since we don't have that information when handcoding...just AOI and Accuracy).
+
+For the sake of time, we will skip over the process of merging those dataframes. If you do find yourself handcoding data using peyecoder, I have included R scripts online that have the code for merging the tobii data we have here and data exported from peyecoder: https://rholson1.github.io/peyecoder/
+
+In the next section we will move on to analyzing our data using the simplest method - by averaging accuracies over the window of analysis. These analyses leverage all of the tidyr data wrangling we have used here and then use `lmer()` models for tests of significance.
+
+

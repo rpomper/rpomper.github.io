@@ -654,6 +654,47 @@ footer.sticky-bottom {
   }
 }
 
+// teaching - copying .publications formatting RON
+
+.teaching {
+
+  margin-top: 2rem;
+  h1 {
+    color: var(--global-theme-color);
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+  h2 {
+    font-weight: bolder;
+    margin-bottom: 1rem;
+    span {
+      font-size: 1.5rem;
+    }
+  }
+  h2.year {
+    color: $grey-color-light;
+    border-top: 1px solid $grey-color-light;
+    padding-top: 1rem;
+    margin-top: 2rem;
+    margin-bottom: -2rem;
+    text-align: right;
+  }
+  a.btn {
+      color: var(--global-text-color);
+      border: 1px solid var(--global-text-color);
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      &:hover {
+        color: var(--global-theme-color);
+        border-color: var(--global-theme-color);
+      }
+    }
+}
+
 // Publications
 
 .publications {
@@ -668,6 +709,7 @@ footer.sticky-bottom {
   }
 
   h2 {
+    font-weight: bolder;
     margin-bottom: 1rem;
 
     span {
