@@ -3,8 +3,8 @@ layout: page
 title: (A)sync
 description: Effects of (a)synchrony on word learning
 img: /assets/img/async.jpg
-importance: 2
-project_order: 2
+importance: 3
+project_order: 3
 category: ongoing research
 ---
 

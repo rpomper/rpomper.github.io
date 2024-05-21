@@ -3,8 +3,8 @@ layout: page
 title: Infer
 description: Inferring word meaning from text
 img: /assets/img/infer.png
-importance: 1
-project_order: 1
+importance: 2
+project_order: 2
 category: ongoing research
 ---
 
