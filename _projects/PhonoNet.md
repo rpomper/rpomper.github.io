@@ -16,6 +16,8 @@ We are developing a website to calculate and plot different values for the phono
 
 The beta version of this website is available here: <a href="https://rpomper.shinyapps.io/phono/">https://rpomper.shinyapps.io/phono/</a>
 
+Note: this website is coded using Shiny and is being hosted for free via shinnyapps.io. If it fails to load, we may have exceeded our active usage quota for the month :(
+
 <h2> SRCLD </h2>
 
 We presented this research at the 2024 <a href="https://srcld.wisc.edu">Symposium on Research in Child Language Disorders</a>:
