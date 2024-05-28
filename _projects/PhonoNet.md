@@ -10,6 +10,12 @@ category: ongoing research
 
 This project is funded by the <a href="https://reporter.nih.gov/project-details/10609433">NIH</a>. It investigates how the phonological structure of children's vocabularies affects their ability to learn new words and whether this varies between children with and without Developmental Language Disorder (DLD).
 
+<h2> App </h2>
+
+We are developing a website to calculate and plot different values for the phonological structure of words (both real and novel).
+
+The beta version of this website is available here: <a href="https://rpomper.shinyapps.io/phono/">https://rpomper.shinyapps.io/phono/</a>
+
 <h2> SRCLD </h2>
 
 We presented this research at the 2024 <a href="https://srcld.wisc.edu">Symposium on Research in Child Language Disorders</a>:
