@@ -16,8 +16,11 @@ social: true # includes social icons at the bottom of the page
 nav_order: 1
 ---
 
-I am a Postdoctoral Research Fellow working with Karla McGregor in the <a href="https://www.boystownhospital.org/research/speech-language/word-learning">Word Learning Lab</a> at Boys Town National Research Hospital. I completed my PhD in Developmental Psychology at the University of Wisconsin-Madison working with Jenny Saffran in the <a href="https://infantlearning.waisman.wisc.edu/" target="\_blank">Infant Learning Lab</a>.
+I am an Assistant Professor in the <a href="https://comartsci.msu.edu/our-people/ron-pomper">Department of Communicative Sciences & Disorders</a> at Michigan State University. 
 
 I study how children learn language, including children with typical language development, Developmental Language Disorder, and Autism Spectrum Disorder. I use behavioral responses and eye-tracking methods to measure different aspects of children's ability to learn new words. My recent work investigates how children form detailed representations of the sounds that form words.
 
 If you are interested in learning more about Developmental Language Disorder (DLD), check out this free <a href="https://bcpractice.com/developmental-language-disorder-guide-for-parents-and-families/">eBook</a> by Dr. Jeanne Tighe and the organizations <a href="https://radld.org">Raising Awareness of Developmental Language Disorder (RADLD)</a> and <a href="https://dldandme.org">DLD and Me</a>.
+
+I completed my postdoctoral fellowship with Karla McGregor in the <a href="https://www.boystownhospital.org/research/speech-language/word-learning">Word Learning Lab</a> at Boys Town National Research Hospital and my PhD with Jenny Saffran in the <a href="https://infantlearning.waisman.wisc.edu/" target="\_blank">Infant Learning Lab</a> at the University of Wisconsin-Madison.
+
