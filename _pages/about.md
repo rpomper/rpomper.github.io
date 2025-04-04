@@ -16,7 +16,7 @@ social: true # includes social icons at the bottom of the page
 nav_order: 1
 ---
 
-I am an Assistant Professor in the <a href="https://comartsci.msu.edu/our-people/ron-pomper">Department of Communicative Sciences & Disorders</a> at Michigan State University. 
+I am an Assistant Professor in the <a href="https://comartsci.msu.edu/our-people/ron-pomper">Department of Communicative Sciences & Disorders</a> at Michigan State University. I direct the Language Learning Lab.
 
 I study how children learn language, including children with typical language development, Developmental Language Disorder, and Autism Spectrum Disorder. I use behavioral responses and eye-tracking methods to measure different aspects of children's ability to learn new words. My recent work investigates how children form detailed representations of the sounds that form words.
 
