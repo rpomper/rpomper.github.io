@@ -12,11 +12,11 @@ This project is funded by the <a href="https://reporter.nih.gov/project-details/
 
 <h2> App </h2>
 
-We are developing a website to calculate and plot different values for the phonological structure of words (both real and novel).
+We are developing a website to calculate and plot different values for the phonological structure of words (both real and novel). The website will allow you to calculate these features based on the entire English lexicon or a lexicon filtered to include only those words below a certain age of acquisition (e.g., 6 years of age). Additionally, it provides normative data for each phonological feature (e.g., what is the average length in phonemes of words in a 6-year-old's vocabulary).
 
 The beta version of this website is available here: <a href="https://rpomper.github.io/phono/">https://rpomper.github.io/phono/</a>
 
-Note: this website is coded using Shiny and is being hosted for free via shinnyapps.io. If it fails to load, we may have exceeded our active usage quota for the month :(
+Note: it will take 1 to 2 minutes for the website to load, because it uses <a href="https://posit-dev.github.io/r-shinylive/">shinylive</a> to run the Shiny application locally rather than hosting it on an external server.
 
 <h2> SRCLD 2025 </h2>
 
