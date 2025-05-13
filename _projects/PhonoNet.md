@@ -14,11 +14,32 @@ This project is funded by the <a href="https://reporter.nih.gov/project-details/
 
 We are developing a website to calculate and plot different values for the phonological structure of words (both real and novel).
 
-The beta version of this website is available here: <a href="https://rpomper.shinyapps.io/phono/">https://rpomper.shinyapps.io/phono/</a>
+The beta version of this website is available here: <a href="https://rpomper.github.io/phono/">https://rpomper.github.io/phono/</a>
 
 Note: this website is coded using Shiny and is being hosted for free via shinnyapps.io. If it fails to load, we may have exceeded our active usage quota for the month :(
 
-<h2> SRCLD </h2>
+<h2> SRCLD 2025 </h2>
+
+We presented this research at the 2025 <a href="https://srcld.wisc.edu">Symposium on Research in Child Language Disorders</a>:
+
+<div class="row">
+    <div class="col-la mt-3 mt-md-0">
+        <img class="img-fluid rounded z-depth-1" src="{{ '/assets/img/PhonoNet-SRCLD-2025.png' | relative_url }}" alt="" title="example paragraph"/>
+    </div>
+</div>
+<div class="caption">
+    <a href="https://rpomper.github.io/assets/img/PhonoNet-SRCLD-2025.png">Click here</a> to download our 2025 SRCLD poster. <br>
+</div>
+
+
+Citation:
+<!-- <blockquote font-size=12px > -->
+Pomper, R., McGregor, K. K., & Vitevitch, M. S. (2025, May).
+Age-related changes in the effect of vocabulary structure on children's word learning.
+Poster presented at the Symposium for Research on Child Language Disorders, Madison, WI.
+<!-- </blockquote> -->
+
+<h2> SRCLD 2024 </h2>
 
 We presented this research at the 2024 <a href="https://srcld.wisc.edu">Symposium on Research in Child Language Disorders</a>:
 
@@ -28,7 +49,7 @@ We presented this research at the 2024 <a href="https://srcld.wisc.edu">Symposiu
     </div>
 </div>
 <div class="caption">
-    <a href="https://rpomper.github.io/assets/img/PhonoNet-SRCLD-2024.png">Click here</a> to download our 2023 SRCLD poster. <br>
+    <a href="https://rpomper.github.io/assets/img/PhonoNet-SRCLD-2024.png">Click here</a> to download our 2024 SRCLD poster. <br>
 </div>
 
 
