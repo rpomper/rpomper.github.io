@@ -8,11 +8,40 @@ nav_order: 5
 ---
 <div class="teaching">
 
-See what I have <a href="https://www.goodreads.com/review/list/75235091?shelf=read">recently read</a> on
+See what I have <a href="https://app.thestorygraph.com/profile/ronpom">recently read</a> on StoryGraph.
 <!-- <img border="0" alt="Ron's book recommendations, liked quotes, book clubs, book lists (read shelf)" src="https://s.gr-assets.com/images/badge/badge1.jpg"> -->
-<a href="https://www.goodreads.com/review/list/75235091?shelf=read"><img src="https://s.gr-assets.com/images/badge/badge1.jpg"></a>
+<!-- <a href="https://www.goodreads.com/review/list/75235091?shelf=read"><img src="https://s.gr-assets.com/images/badge/badge1.jpg"></a> -->
 <br><br>
 <p> Below are some of my favorite books from each year.
+
+<h2 class="year">{{2025}}</h2>
+
+<img height=300 alt="Book cover for Stone Butch Blues by Leslie Feinberg" src="https://cdn.thestorygraph.com/35blmrxx0ziv48s6vzlvsho0gpyx">
+<br><br>
+<h3> Stone Butch Blues </h3>
+<h4> Leslie Feinberg </h4>
+First published 1993 <br><br>
+
+<p> Stone Butch Blues, Leslie Feinberg's 1993 first novel, is widely considered in and outside the U.S. to be a groundbreaking work about the complexities of gender. Stone Butch Blues follows the life of Jess Goldberg, a gender-nonconforming butch lesbian, from her childhood in the 1940s through the 1970s. Jess explores her transgender and lesbian identities amid homophobia, transphobia, police violence, gendered violence, classism, anti-Semitism, and anti-butch animus. Stone Butch Blues is considered a cult classic in LGBT communities, and continues to be popular almost 30 years after its original publication.</p>
+<p>
+<a href="https://app.thestorygraph.com/books/8e4125c9-a879-4204-aa45-afbfb0e1b928" class="btn btn-me z-depth-0" role="button">StoryGraph</a>
+<a href="https://www.lesliefeinberg.net" class="btn btn-me z-depth-0" role="button">Read/Buy Here</a>
+
+
+<h2 class="year">{{2024}}</h2>
+
+<img height=300 alt="Book cover for Leslie F*cking Jones by Leslie Jones" src="https://cdn.thestorygraph.com/8j1s7ccb7sjkio3fx99fdo0fne6r">
+<br><br>
+<h3> Leslie F*cking Jones </h3>
+<h4> Leslie Jones </h4>
+First published 2023 <br><br>
+
+<p> Hey you guys, it's Leslie. I'm excited to share my story with you.
+<br><br>
+Now, I'm gonna be honest: Some of the details might be vague because a b*tch is fifty-five and she's smoked a ton of weed. But while bits might be a touch hazy, I can promise you the underlying truth is REAL. Whether I'm talking about my childhood growing up in the South, my early stand-up days driving from gig to gig through the darkest parts of our country and praying I wouldn't get murdered, what Chris Rock told Lorne Michaels, that time I wanted to shoot Whoopi Goldberg on SNL, and yeah, I'll tell you all about Ghostbusters and the nudes and Supermarket Sweep and The Daily Show . . . I'm sharing it all in these pages. It's not easy being a woman in comedy, especially when you're a tall-*ss Black woman with a trumpet voice. I have to fight so that no one takes me for granted, and no one takes advantage. These are the stories that explain why. (Cue the Law & Order theme.)
+</p>
+<p>
+<a href="https://app.thestorygraph.com/books/96d05324-d372-4478-94f4-1e28b81d9548" class="btn btn-me z-depth-0" role="button">StoryGraph</a>
 
 
 <h2 class="year">{{2023}}</h2>
@@ -26,7 +55,7 @@ First published 2013 <br><br>
 
 <p> As a botanist, Robin Wall Kimmerer has been trained to ask questions of nature with the tools of science. As a member of the Citizen Potawatomi Nation, she embraces the notion that plants and animals are our oldest teachers. In Braiding Sweetgrass, Kimmerer brings these lenses of knowledge together to show that the awakening of a wider ecological consciousness requires the acknowledgment and celebration of our reciprocal relationship with the rest of the living world. For only when we can hear the languages of other beings are we capable of understanding the generosity of the earth, and learning to give our own gifts in return. </p>
 <p>
-<a href="https://www.goodreads.com/book/show/17465709-braiding-sweetgrass" class="btn btn-me z-depth-0" role="button">GoodReads</a>
+<a href="https://app.thestorygraph.com/books/50ef96a1-9370-4a58-9d66-1770db58a86d" class="btn btn-me z-depth-0" role="button">StoryGraph</a>
 
 
 <h2 class="year">{{2022}}</h2>
@@ -47,7 +76,7 @@ Brought up by unfriendly, ossifying nuns, ancient retainers, and countless skele
 <br><br>
 Harrowhark Nonagesimus, Reverend Daughter of the Ninth House and bone witch extraordinaire, has been summoned into action. The Emperor has invited the heirs to each of his loyal Houses to a deadly trial of wits and skill. If Harrowhark succeeds she will become an immortal, all-powerful servant of the Resurrection, but no necromancer can ascend without their cavalier. Without Gideon's sword, Harrow will fail, and the Ninth House will die.
 <p>
-<a href="https://www.goodreads.com/book/show/42036538-gideon-the-ninth" class="btn btn-me z-depth-0" role="button">GoodReads</a>
+<a href="https://app.thestorygraph.com/books/ca07b067-8c64-4b8e-985c-52efc4b94f3e" class="btn btn-me z-depth-0" role="button">StoryGraph</a>
 
 
 
@@ -65,7 +94,7 @@ Now she reclaims her identity to tell her story of trauma, transcendence, and th
 <br><br>
 Know My Name will forever transform the way we think about sexual assault, challenging our beliefs about what is acceptable and speaking truth to the tumultuous reality of healing. It also introduces readers to an extraordinary writer, one whose words have already changed our world. Entwining pain, resilience, and humor, this memoir will stand as a modern classic. </p>
 <p>
-<a href="https://www.goodreads.com/book/show/50196744-know-my-name" class="btn btn-m z-depth-0" role="button">GoodReads</a>
+<a href="https://app.thestorygraph.com/books/60e73d4f-3d13-4afd-988a-f4b50ced8a79" class="btn btn-m z-depth-0" role="button">StoryGraph</a>
 
 
 
@@ -81,7 +110,7 @@ First published 2013 <br><br>
 <br><br>
 Now, experience John Lewis' incredible story first-hand, brought to life in a stunning graphic novel trilogy. With co-writer Andrew Aydin and Eisner Award-winning artist Nate Powell, John Lewis' MARCH tells the story of how a poor sharecropper's son helped transform America, from a segregated schoolhouse to the 1963 March on Washington and beyond. </p>
 <p>
-<a href="https://www.goodreads.com/book/show/29844341-march" class="btn btn-m z-depth-0" role="button">GoodReads</a>
+<a href="https://app.thestorygraph.com/books/931ac015-c74c-468d-80b4-6856671da010" class="btn btn-m z-depth-0" role="button">StoryGraph</a>
 
 
 <h2 class="year">{{2019}}</h2>
@@ -100,7 +129,7 @@ James W. Loewen, a sociology professor and distinguished critic of history educa
 <br><br>
 From the truth about Christopher Columbus to the harsh reality of the Vietnam War, Loewen picks apart the lies we've been told. This audiobook, narrated by Brian Keeler (The Hurricane, "All My Children") will forever change your view of the past.</p>
 <p>
-<a href="https://www.goodreads.com/book/show/296662.Lies_My_Teacher_Told_Me" class="btn btn-m z-depth-0" role="button">GoodReads</a>
+<a href="https://app.thestorygraph.com/books/95cdeb30-9e18-4a30-b4d1-4737b4b6fa7d" class="btn btn-m z-depth-0" role="button">StoryGraph</a>
 
 
 <h2 class="year">{{2018}}</h2>
@@ -119,7 +148,7 @@ Sethe works at beating back the past, but it makes itself heard and felt incessa
 <br><br>
 Combining the visionary power of legend with the unassailable truth of history, Morrison's unforgettable novel is one of the great and enduring works of American literature.</p>
 <p>
-<a href="https://www.goodreads.com/book/show/6149.Beloved" class="btn btn-m z-depth-0" role="button">GoodReads</a>
+<a href="https://app.thestorygraph.com/books/ec568358-1ffd-44db-af36-4c1344b9ec0c" class="btn btn-m z-depth-0" role="button">StoryGraph</a>
 
 
 <h2 class="year">{{2017}}</h2>
@@ -135,4 +164,4 @@ First published 2016 <br><br>
 Homegoing follows the parallel paths of these sisters and their descendants through eight generations: from the Gold Coast to the plantations of Mississippi, from the American Civil War to Jazz Age Harlem. Yaa Gyasi's extraordinary novel illuminates slavery's troubled legacy both for those who were taken and those who stayed-and shows how the memory of captivity has been inscribed on the soul of our nation.</p>
 <p>
 
-<a href="https://www.goodreads.com/book/show/31147619-homegoing" class="btn btn-m z-depth-0" role="button">GoodReads</a>
+<a href="https://app.thestorygraph.com/books/31ec3894-5f84-4abf-9cca-f581f1ee5570" class="btn btn-m z-depth-0" role="button">StoryGraph</a>
