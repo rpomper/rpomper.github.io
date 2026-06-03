@@ -3,13 +3,22 @@ layout: page
 title: Infer
 description: Inferring word meaning from text
 img: /assets/img/infer.png
-importance: 2
-project_order: 2
-category: ongoing research
+importance: 1
+project_order: 1
+category: completed
 ---
 
 This project is part of the <a href="https://www.boystownhospital.org/research/speech-language/word-learning/childrens-vocabulary-project">Children's Vocabulary Project</a> in the <a href="https://www.boystownhospital.org/research/speech-language/word-learning/">Word Learning Lab</a> at Boys Town National Research Hospital.
 The Children's Vocabulary Project is a longitudinal project funded by the <a href="https://reporter.nih.gov/project-details/10194443">NIH</a> that aims to establish a developmental trajectory of word learning for children with DLD and the underlying cognitive mechanisms.
+
+The published manuscript for this project is available <a href="https://pubs.asha.org/doi/full/10.1044/2024_JSLHR-23-00743">here</a>
+
+Citation:
+<blockquote style="font-size: 16px;">
+McGregor, K. K., Pomper, R., Eden, N., Appenzeller, M., Arbisi-Kelm, T., Polese, E., & Reed, D. K. (2024).
+Inferring Word Class and Meaning From Spoken and Written Texts: A Comparison of Children With and Without Developmental Language Disorder. 
+<i>Journal of Speech, Language, and Hearing Research, 67</i>(12), 4783-4798.
+</blockquote>
 
 
 <img height=250 alt="Word Learning Lab Logo" src="/assets/img/wll_logo.png"> <br>
@@ -138,11 +147,11 @@ We presented this research at the 2023 <a href="https://srcldconference.com">Sym
 <a href="https://rpomper.github.io/assets/pdf/Infer_References.pdf">Click here</a> for the full list of references for our poster. <br>
 
 Citation:
-<!-- <blockquote font-size=12px > -->
+<blockquote style="font-size: 16px;">
 Pomper, R., Reed, D. K., Eden, N., Arbisi-Kelm, T., & McGregor, K. K. (2023, June).
 How children with and without Developmental Language Disorder infer word meaning from written and spoken text.
 Poster presented at the Symposium for Research on Child Language Disorders, Madison, WI.
-<!-- </blockquote> -->
+</blockquote>
 
 <h2> Why it matters </h2>
 
