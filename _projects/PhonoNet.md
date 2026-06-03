@@ -3,9 +3,9 @@ layout: page
 title: PhonoNet
 description: Phonological Networks and Novel Word Learning by Children with Developmental Language Disorder
 img: /assets/img/phononet.png
-importance: 1
-project_order: 1
-category: ongoing research
+importance: 2
+project_order: 2
+category: ongoing
 ---
 
 This project is funded by the <a href="https://reporter.nih.gov/project-details/10609433">NIH</a>. It investigates how the phonological structure of children's vocabularies affects their ability to learn new words and whether this varies between children with and without Developmental Language Disorder (DLD).
@@ -33,11 +33,11 @@ We presented this research at the 2025 <a href="https://srcld.wisc.edu">Symposiu
 
 
 Citation:
-<!-- <blockquote font-size=12px > -->
+<blockquote style="font-size: 16px;">
 Pomper, R., McGregor, K. K., & Vitevitch, M. S. (2025, May).
 Age-related changes in the effect of vocabulary structure on children's word learning.
 Poster presented at the Symposium for Research on Child Language Disorders, Madison, WI.
-<!-- </blockquote> -->
+</blockquote>
 
 <h2> SRCLD 2024 </h2>
 
@@ -54,11 +54,11 @@ We presented this research at the 2024 <a href="https://srcld.wisc.edu">Symposiu
 
 
 Citation:
-<!-- <blockquote font-size=12px > -->
+<blockquote style="font-size: 16px;">
 Pomper, R., McGregor, K. K., & Vitevitch, M. S. (2024, May).
 Measuring phonological structure of children's vocabularies using a lexical decision task.
 Poster presented at the Symposium for Research on Child Language Disorders, Madison, WI.
-<!-- </blockquote> -->
+</blockquote>
 
 <h2> What we did </h2>
 
