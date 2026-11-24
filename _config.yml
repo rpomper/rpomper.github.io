@@ -6,9 +6,9 @@ title: blank # the website title (if blank, full name will be used instead)
 first_name: Ron
 middle_name: 
 last_name: Pomper
-email: ronald.pomper@boystown.org
+email: pomp@msu.edu
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Ron Pomper's research website. Postdoc at Boys Town National Research Hospital studying word learning by children with Developmental Language Disorder.
+  Ron Pomper's research website. Assistant professor at Michigan State University studying word learning by children with Developmental Language Disorder.
 footer_text: >
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
   Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
